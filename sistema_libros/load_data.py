@@ -11,7 +11,7 @@ import mongoengine
 from books.models import Book
 from datetime import datetime
 
-# Desconectar todas las conexiones existentes
+# Desconectard todas las conexiones existentes
 mongoengine.disconnect_all()
 
 # Conectar a MongoDB Atlas
