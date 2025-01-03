@@ -1,9 +1,24 @@
+import os
+import django
+import sys
+
+# Configura el entorno de Django
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sistema_libros.settings')
+django.setup()
+
 import mongoengine
-from books.models import  Book
+from books.models import Book
 from datetime import datetime
 
+# Desconectar todas las conexiones existentes
+mongoengine.disconnect_all()
 
-mongoengine.connect(host="mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0")
+# Conectar a MongoDB Atlas
+mongoengine.connect(
+    db='sistema_libros',
+    host="mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0"
+)
 
 sample_books = [
     {
@@ -43,8 +58,10 @@ sample_books = [
     }
 ]
 
-for book_data in sample_books:
-    book = Book(**book_data)
-    book.save()
-
-print("Datos de muestra creados exitosamente")
+try:
+    for book_data in sample_books:
+        book = Book(**book_data)
+        book.save()
+    print("Datos de muestra creados exitosamente")
+except Exception as e:
+    print(f"Error al crear los datos: {e}")

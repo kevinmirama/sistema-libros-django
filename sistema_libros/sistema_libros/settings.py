@@ -40,7 +40,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_mongoengine',
     'books',
+    'drf_yasg'
 ]
+
+REDOC_SETTINGS = {
+    'SPEC_URL': ('schema-redoc',),
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -50,15 +55,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-MONGODB_HOST = 'localhost'
-MONGODB_PORT = 27017
-MONGODB_NAME = 'books_db'
 
-connect(
-    db=MONGODB_NAME,
-    host=MONGODB_HOST,
-    port=MONGODB_PORT
-)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
