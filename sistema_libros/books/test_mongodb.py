@@ -11,7 +11,7 @@ def test_connection():
         
         print("✅ Conexión exitosa a MongoDB!")
         
-        # Listar bases de datos disponibles
+        # Listar bases de sdatos disponibles
         dbs = client.list_database_names()
         print("Bases de datos disponibles:", dbs)
         
