@@ -1,14 +1,11 @@
-from mongoengine import Document, StringField, DateTimeField, FloatField
-from datetime import datetime
+from django.db import models
 
-class Book(Document):
-    title = StringField(required=True, max_length=200)
-    author = StringField(required=True, max_length=100)
-    published_date = DateTimeField(required=True)
-    genre = StringField(required=True, max_length=50)
-    price = FloatField(required=True)
-    
-    meta = {
-        'collection': 'books',
-        'db_alias': 'default'
-    }
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=200)
+    published_date = models.DateField()
+    genre = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return self.title

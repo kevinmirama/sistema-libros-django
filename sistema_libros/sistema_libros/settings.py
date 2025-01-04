@@ -10,15 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import pymongo 
-from mongoengine import connect
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-connect( db="sistema_libros", host="mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0" )
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,6 +28,7 @@ SECRET_KEY = 'django-insecure-mz08!_&3%iv8-(z5g@1v8mook%)auy3)tx(2$r_b$u=ti45o4x
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     '.appspot.com',  # Permite todas las subdominios de appspot.com
     'reto-vacante.rj.r.appspot.com',  # Añade la URL específica de tu despliegue
       # Añade cualquier otra variación de la URL si es necesario
@@ -45,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_mongoengine',
+    'rest_framework.authtoken',
+    'corsheaders',
     'books',
     'drf_yasg'
 ]
@@ -54,13 +53,7 @@ REDOC_SETTINGS = {
     'SPEC_URL': ('schema-redoc',),
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
-}
+REST_FRAMEWORK = { 'DEFAULT_AUTHENTICATION_CLASSES': [ 'rest_framework.authentication.TokenAuthentication', ], 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 'PAGE_SIZE': 10, }
 
 
 MIDDLEWARE = [
@@ -97,7 +90,19 @@ WSGI_APPLICATION = 'sistema_libros.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = { 'default': { 'ENGINE': 'djongo', 'NAME': 'sistema_libros', 'ENFORCE_SCHEMA': False, 'CLIENT': { 'host': "mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0", 'username': 'kevinmirama2', 'password': '4PNt6F9JXE9q7hUK', } } }
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-secret-key')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.appspot.com').split(',')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'sistema_libros',
+        'CLIENT': {
+            'host': os.environ.get('MONGODB_URI')
+        }
+    }
+}
 
 
 # Password validation
