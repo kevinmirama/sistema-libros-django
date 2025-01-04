@@ -11,24 +11,17 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 
+# settings.py
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-mz08!_&3%iv8-(z5g@1v8mook%)auy3)tx(2$r_b$u=ti45o4x')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-mz08!_&3%iv8-(z5g@1v8mook%)auy3)tx(2$r_b$u=ti45o4x')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '.appspot.com',
-    'reto-vacante.rj.r.appspot.com',
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '.appspot.com,reto-vacante.rj.r.appspot.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,30 +34,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'books',
     'drf_yasg',
+    'books',  # tu app
 ]
 
-REDOC_SETTINGS = {
-    'SPEC_URL': ('schema-redoc',),
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-}
-
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Añadido para manejar archivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # Si usas CORS
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -92,13 +69,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sistema_libros.wsgi.application'
 
-# Database configuration
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'sistema_libros',
         'CLIENT': {
-            'host': os.environ.get('MONGODB_URI')
+            'host': os.getenv('MONGODB_URI'),
         }
     }
 }
@@ -120,29 +97,56 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es-co'
+TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Configuración para servir archivos estáticos en producción
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Configuración específica para App Engine
-if os.getenv('GAE_APPLICATION', None):
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    ADMIN_MEDIA_PREFIX = '/static/admin/'
-
-# CORS configuration (si lo necesitas)
-CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo, configura apropiadamente en producción
-CORS_ALLOW_CREDENTIALS = True
+STATIC_ROOT = 'staticfiles'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS Configuration
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# REST Framework Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# Swagger Settings
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+}
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}

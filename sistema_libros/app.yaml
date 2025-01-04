@@ -1,5 +1,5 @@
 runtime: python39
-entrypoint: gunicorn -b :$PORT sistema_libros.wsgi
+entrypoint: gunicorn sistema_libros.wsgi:application --bind :$PORT --workers 2 --timeout 120
 
 env_variables:
   MONGODB_URI: "mongodb+srv://kevinmirama2:zJUNzXMq34pXuWKv@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0"
@@ -8,13 +8,13 @@ env_variables:
   ALLOWED_HOSTS: ".appspot.com,reto-vacante.rj.r.appspot.com"
 
 handlers:
-  # Manejar archivos estáticos
+  # Archivos estáticos
   - url: /static/(.*)
     static_files: staticfiles/\1
     upload: staticfiles/.*
     secure: always
 
-  # Manejar favicon
+  # Favicon
   - url: /favicon\.ico
     static_files: staticfiles/favicon.ico
     upload: staticfiles/favicon\.ico
