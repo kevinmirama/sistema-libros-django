@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
-    'books',  # tu app
+    'books',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +76,11 @@ DATABASES = {
         'NAME': 'sistema_libros',
         'CLIENT': {
             'host': os.getenv('MONGODB_URI'),
+            'ssl': True,
+            'tls': True,
+            'tlsAllowInvalidCertificates': True,
+            'retryWrites': True,
+            'w': 'majority'
         }
     }
 }
