@@ -10,12 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import pymongo 
 from mongoengine import connect
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+connect( db="sistema_libros", host="mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0" )
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,7 +35,6 @@ ALLOWED_HOSTS = [
     'reto-vacante.rj.r.appspot.com',  # Añade la URL específica de tu despliegue
       # Añade cualquier otra variación de la URL si es necesario
 ]
-
 
 
 INSTALLED_APPS = [
@@ -59,7 +61,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
-
 
 
 MIDDLEWARE = [
@@ -96,21 +97,7 @@ WSGI_APPLICATION = 'sistema_libros.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Cambiamos temporalmente a SQLite
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-MONGODB_DATABASES = {
-    'default': {
-        'name': 'sistema_libros',
-        'host': 'localhost',
-        'port': 27017,
-    }
-}
-
+DATABASES = { 'default': { 'ENGINE': 'djongo', 'NAME': 'sistema_libros', 'ENFORCE_SCHEMA': False, 'CLIENT': { 'host': "mongodb+srv://kevinmirama2:4PNt6F9JXE9q7hUK@cluster0.1buy3.mongodb.net/sistema_libros?retryWrites=true&w=majority&appName=Cluster0", 'username': 'kevinmirama2', 'password': '4PNt6F9JXE9q7hUK', } } }
 
 
 # Password validation
