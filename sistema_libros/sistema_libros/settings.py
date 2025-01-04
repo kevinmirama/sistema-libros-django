@@ -27,7 +27,12 @@ SECRET_KEY = 'django-insecure-mz08!_&3%iv8-(z5g@1v8mook%)auy3)tx(2$r_b$u=ti45o4x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.appspot.com',  # Permite todas las subdominios de appspot.com
+    'reto-vacante.rj.r.appspot.com',  # Añade la URL específica de tu despliegue
+      # Añade cualquier otra variación de la URL si es necesario
+]
+
 
 
 INSTALLED_APPS = [
