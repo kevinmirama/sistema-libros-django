@@ -19,7 +19,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('books.urls')),  # Incluir las URLs de la aplicación books
     path('api-token-auth/', authtoken_views.obtain_auth_token, name='api_token_auth'),  # Endpoint de autenticación
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
-    path('swagger-json/', schema_view.without_ui(cache_timeout=0), name='schema-swagger-json') # Documentación Swagger
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),  # Documentación Swagger
+    path('swagger-json/', schema_view.without_ui(cache_timeout=0), name='schema-swagger-json'),  # JSON del esquema
 ]
+
 
