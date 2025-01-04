@@ -10,19 +10,16 @@ env_variables:
   SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
 
 handlers:
-  # Archivos estáticos
   - url: /static/(.*)
     static_files: staticfiles/\1
     upload: staticfiles/.*
     secure: always
 
-  # Favicon
   - url: /favicon\.ico
     static_files: staticfiles/favicon.ico
     upload: staticfiles/favicon\.ico
     secure: always
 
-  # Todas las demás URLs
   - url: /.*
     script: auto
     secure: always
